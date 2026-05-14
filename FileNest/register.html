@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Document Management System</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    
+    <div class="register-container">
+        <div class="logo-title">
+            <div class="logo"><img src="image.png"></div>
+            <h1>FileNest</h1>
+        </div>
+        <h1>Create an Account</h1>
+        <form id="registerForm" onsubmit="register(event)">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Confirm Password" required>
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="index.html">Login</a></p>
+        </form>
+    </div>
+    <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Drive</title>
+  <style>
+    /* General Styling */
+    body {
+      background-color: #f4f6f8;
+      color: #3c4043;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+
+    /* Sidebar styling */
+    #sidebar {
+      width: 200px; /* Reduced width */
+      background-color: #202124;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background-color: #0073e6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      overflow: hidden; 
+    }
+
+    .logo img {
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+    }
+
+    .logo-title h1 {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    .new-button-container {
+      text-align: center;
+    }
+
+    #newButton {
+      width: 90%;
+      padding: 10px;
+      border: none;
+      background-color: #4285f4;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    #newButton:hover {
+      background-color: #357ae8;
+    }
+
+    #newDropdown {
+      display: none;
+      background-color: #fff;
+      color: #333;
+      position: absolute;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #newDropdown div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    #newDropdown div:hover {
+      background-color: #f4f4f4;
+    }
+
+    .sidebar-item {
+      padding: 12px;
+      margin: 10px 0;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: left;
+      color: #e8eaed;
+    }
+
+    .sidebar-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .sidebar-item:hover {
+      background-color: #35363a;
+    }
+
+    /* Main Content */
+    #main-content {
+      margin-left: 240px; /* Adjust margin to move content to the right */
+      padding: 20px;
+      flex: 1;
+    }
+
+    header {
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+
+    /* Search Bar */
+    #searchBar {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    /* File Container */
+    #fileContainer {
+      display: flex;
+      flex-direction: column; /* Stack files vertically */
+      gap: 15px;
+      width: 100%;
+    }
+
+    .file {
+      background-color: #ffffff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      width: 100%; /* Full width */
+      box-sizing: border-box;
+    }
+
+    .file:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .file-info strong {
+      font-size: 1em;
+    }
+
+    .file-options {
+      text-align: right;
+    }
+
+    .file-options button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #4285f4;
+      color: white;
+    }
+
+    .file-options button:hover {
+      background-color: #357ae8;
+    }
+
+    /* File Details */
+    #fileDetails {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: none; /* Initially hidden */
+    }
+
+    #fileDetails h3 {
+      margin-top: 0;
+    }
+
+    /* Permissions Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 6px;
+      width: 300px;
+    }
+    .modal-header {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .modal-footer {
+      text-align: right;
+    }
+    .close-modal {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .save-permission {
+      background-color: #4CAF50;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="logo-title">
+      <div class="logo"><img src="image.png" alt="FileNest Logo"></div>
+      <h1>FileNest</h1>
+    </div>
+    <div class="new-button-container">
+      <button id="newButton">+ New</button>
+      <div id="newDropdown" class="dropdown">
+        <div id="uploadFileOption">Upload File</div>
+      </div>
+    </div>
+    <div class="sidebar-item"><a href="dashboard.html">Home</a></div>
+    <div class="sidebar-item"><a href="mydrive.html">My Drive</a></div>
+    <div class="sidebar-item"><a href="trash.html">Trash</a></div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <header>
+      <h2>My Drive</h2>
+      <!-- Search Bar -->
+      <input type="text" id="searchBar" placeholder="Search files...">
+    </header>
+    <div id="fileContainer"></div>
+
+    <!-- File Details Section -->
+    <div id="fileDetails">
+      <h3>File Details</h3>
+      <p id="fileName"></p>
+      <p id="fileType"></p>
+      <p id="fileVersion"></p>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" style="display: none;">
+
+  <!-- Permissions Modal -->
+  <div id="permissionsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Set Permissions</div>
+      <div>
+        <label for="permissionSelect">Permission Type:</label>
+        <select id="permissionSelect">
+          <option value="view">View</option>
+          <option value="edit">Edit</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="close-modal" onclick="closePermissionsModal()">Close</button>
+        <button class="save-permission" onclick="savePermission()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileContainer = document.getElementById('fileContainer');
+    const fileInput = document.getElementById('fileInput');
+    const newButton = document.getElementById('newButton');
+    const newDropdown = document.getElementById('newDropdown');
+    const searchBar = document.getElementById('searchBar');
+    const fileDetails = document.getElementById('fileDetails');
+    const fileName = document.getElementById('fileName');
+    const fileType = document.getElementById('fileType');
+    const fileVersion = document.getElementById('fileVersion');
+    const permissionsModal = document.getElementById('permissionsModal');
+    const permissionSelect = document.getElementById('permissionSelect');
+
+    let files = JSON.parse(localStorage.getItem('files')) || [];
+    let selectedFileIndex = null;
+
+    newButton.addEventListener('click', () => {
+      newDropdown.style.display = newDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('uploadFileOption').addEventListener('click', () => {
+      fileInput.click();
+      newDropdown.style.display = 'none';
+    });
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file) {
+        if (files.some(f => f.name === file.name)) {
+          alert('A file with this name already exists.');
+          return;
+        }
+        files.push({ name: file.name, type: file.type || 'Unknown', version: '1.0', permission: 'view' });
+        localStorage.setItem('files', JSON.stringify(files));
+        renderFiles();
+      } else {
+        alert('No file selected.');
+      }
+    });
+
+    function renderFiles(filteredFiles = files) {
+      fileContainer.innerHTML = '';
+      if (filteredFiles.length === 0) {
+        fileContainer.innerHTML = '<p>No files available. Upload files to get started.</p>';
+        return;
+      }
+
+      filteredFiles.forEach((file, index) => {
+        const fileDiv = document.createElement('div');
+        fileDiv.className = 'file';
+        fileDiv.innerHTML = `
+          <div class="file-info">
+            <strong>${file.name}</strong>
+            <span class="file-type">${file.type}</span>
+          </div>
+          <div class="file-options">
+            <button onclick="moveToTrash(${index})">Move to Trash</button>
+            <button onclick="showFileDetails(${index})">View Details</button>
+            <button onclick="openPermissionsModal(${index})">Set Permissions</button>
+          </div>
+          <div class="file-permission">Permission: ${file.permission}</div>
+        `;
+        fileContainer.appendChild(fileDiv);
+      });
+    }
+
+    function moveToTrash(index) {
+      let trash = JSON.parse(localStorage.getItem('trash')) || [];
+      const movedFile = files.splice(index, 1)[0];
+      trash.push(movedFile);
+      localStorage.setItem('files', JSON.stringify(files));
+      localStorage.setItem('trash', JSON.stringify(trash));
+      renderFiles();
+      alert(`File "${movedFile.name}" moved to Trash.`);
+    }
+
+    function showFileDetails(index) {
+      const file = files[index];
+      fileName.textContent = `Name: ${file.name}`;
+      fileType.textContent = `Type: ${file.type}`;
+      fileVersion.textContent = `Version: ${file.version}`;
+      fileDetails.style.display = 'block';
+    }
+
+    // Open permissions modal
+    function openPermissionsModal(index) {
+      selectedFileIndex = index;
+      const file = files[index];
+      permissionSelect.value = file.permission;
+      permissionsModal.style.display = 'flex';
+    }
+
+    function closePermissionsModal() {
+      permissionsModal.style.display = 'none';
+    }
+
+    function savePermission() {
+      const permission = permissionSelect.value;
+      files[selectedFileIndex].permission = permission;
+      localStorage.setItem('files', JSON.stringify(files));
+      renderFiles();
+      closePermissionsModal();
+      alert('Permission updated successfully.');
+    }
+
+    // Search functionality
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      const filteredFiles = files.filter(file => file.name.toLowerCase().includes(query));
+      renderFiles(filteredFiles);
+    });
+
+    renderFiles();
+  </script>
+</body>
+</html>

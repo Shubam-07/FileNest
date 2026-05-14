@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account - FileNest</title>
+  <style>  
+#accountPage {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #333;
+  }
+  
+  header p {
+    text-align: center;
+    color: #666;
+    font-size: 1em;
+  }
+  
+  .account-section {
+    margin: 30px 0;
+  }
+  
+  .account-section h3 {
+    font-size: 1.4em;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  #profileForm, #passwordForm {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #profileForm label, #passwordForm label {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #444;
+  }
+  
+  #profileForm input, #passwordForm input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-top: 5px;
+  }
+  
+  button {
+    margin-top: 15px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #4285f4;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  button:hover {
+    background-color: #357ae8;
+  }
+  
+  #deleteAccount {
+    background-color: #e74c3c;
+  }
+  
+  #deleteAccount:hover {
+    background-color: #c0392b;
+  }
+  
+  </style>
+</head>
+<body>
+  <div id="accountPage">
+    <header>
+      <h2>My Account</h2>
+      <p>Manage your account settings and profile information</p>
+    </header>
+
+    <div class="account-section">
+      <h3>Profile Information</h3>
+      <form id="profileForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        
+        <button type="button" id="saveProfile">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="account-section">
+      <h3>Password</h3>
+      <form id="passwordForm">
+        <label for="currentPassword">Current Password:</label>
+        <input type="password" id="currentPassword" placeholder="Current password" required>
+        
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" placeholder="New password" required>
+        
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+        
+        <button type="button" id="changePassword">Change Password</button>
+      </form>
+    </div>
+
+    <div class="account-section">
+      <h3>Account Settings</h3>
+      <button id="deleteAccount">Delete Account</button>
+    </div>
+  </div>
+
+  <script src="account.js"></script>
+</body>
+</html>
